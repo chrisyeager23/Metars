@@ -1,0 +1,67 @@
+﻿<html>
+<head>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+	<script type="text/javascript" language="javascript">
+		var socket = io();
+		function refreshStatus(led) {
+			socket.emit("REFRESHSTATUS", null);
+			location.reload();
+		}
+	</script>
+	<title>Mark's Airport Map Home</title>
+	<style>
+		* {
+			-webkit-user-select: auto;
+			/*-khtml-user-select: none;*/
+			-moz-user-select: -moz-none;
+			-o-user-select: none;
+			user-select: none;
+		}
+	</style>
+</head>
+<body>
+	<div class="container-fluid">
+		<nav class="navbar navbar-expand flex-column flex-md-row bd-navbar" style="background-color:#563d7c;">
+			<a class="navbar-brand" href="#" style="color:#ffd800;">Mark's Airport Map</a>
+			<div class="navbar-nav-scroll">
+				<ul class="navbar-nav bd-navbar-nav flex-row">
+					<li class="nav-item">
+						<a class="nav-link" style="color:#ffd800;" href="/setup.html">Setup</a>
+					</li>
+				</ul>
+			</div>
+			<div class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+				<a class="navbar-brand" href="#" style="color:#ffd800;">V1.1</a>
+			</div>
+		</nav>&nbsp;
+		
+		<div class="row" style="padding-bottom:20px;">
+			<div class="col-2">
+				<button type="button" class="btn btn-primary" id="btnRefresh" onclick="refreshStatus()">Refresh Status</button>
+			</div>
+		</div>
+		<table id="airports" border="1" style="display:block;height:300px;overflow:auto">
+			<thead style="font-weight:bold;">
+				<tr>
+					<td>Code</td>
+					<td>LED</td>
+					<td>Flight Cat</td>
+					<td>Wind</td>
+					<td>Visability</td>
+					<td>Ceiling</td>
+					<td>Maint</td>
+					<td>Raw</td>
+				</tr>
+			</thead>
+			<tbody>
+				{AIRPORT_LIST}
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>

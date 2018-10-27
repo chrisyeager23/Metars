@@ -1,0 +1,243 @@
+<html>
+<head>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+	<script type="text/javascript" language="javascript">
+		var socket = io();
+
+		function led_clear(led_lbl) {
+			led_lbl.innerText = '';
+		}
+		function led_click(led) {
+			socket.emit("FLASHLED", led.firstChild.data);
+		}
+		function allowDrop(ev) {
+			ev.preventDefault();
+		}
+		function drag(ev) {
+			ev.dataTransfer.setData("text", ev.target.firstChild.data);
+		}
+		function drop(ev) {
+			ev.preventDefault();
+			var data = ev.dataTransfer.getData("text");
+			// before adding to the target, remove from any other label that might have it
+			var i = 1;
+			var lbl = document.getElementById("LBL_" + i);
+			while (lbl != null) {
+				if (lbl.innerText == data)
+					lbl.innerText = '';
+				i++;
+				lbl = document.getElementById("LBL_" + i);
+			}
+			// finally set the text on the target node
+			ev.target.children[1].innerText = data;
+			showSave();
+		}
+		function showSave() {
+			$("#BTN_Save").show();
+		}
+		function changeLEDCount() {
+			var ap = Number($("#LEDCount").val().trim());
+			socket.emit("LEDCOUNT", ap);
+			location.reload();
+		}
+		function newAptList() {
+			var apts = $("#aptStringList").val();
+			socket.emit("NEWAPTS", apts);
+			location.reload();
+		}
+		function doSave() {
+			// build up string of all airports and then a list of airports assigned to LEDs
+			var ws = $("#txtWind").val();
+		    var saveString = '{"LEDs": LEDCOUNT, "WindSpeed": ' + ws +', "Airports":[';
+			var comma = '';
+			var idx = 1;
+			var ap = document.getElementById("AP_" + idx);
+			while (ap != null) {
+				var name = ap.innerText;
+				// Find the LED that has this airport (null if not found)
+				var i = 1, led = -1;
+				var lbl = document.getElementById("LBL_" + i);
+				while (lbl != null) {
+					if (lbl.innerText == name) {
+						led = i;
+						break;
+					}
+					i++;
+					lbl = document.getElementById("LBL_" + i);
+				}
+				saveString += comma + '{"Name": "' + name + '", "LEDIndex": ' + led + '}';
+				comma = ',';
+				idx++;
+				ap = document.getElementById("AP_" + idx);
+			}
+			saveString += ']}';
+			// Count the number of 'LBL_#" labels to get LED Count
+			var ledc = 1;
+			ap = document.getElementById("LBL_" + ledc);
+			while (ap != null) {
+				ledc++;
+				ap = document.getElementById("LBL_" + ledc);
+			}
+			saveString = saveString.replace('LEDCOUNT', ledc-1);
+			socket.emit("SAVE", saveString);
+			location.reload();
+		}
+		$(document).ready(function () {
+			$('#ledCountModal').on('shown.bs.modal', function () {
+				$('#LEDCount').trigger('focus');
+			});
+			$("#LEDCount").keyup(function (event) {
+				if (event.keyCode === 13) {
+					$("#btnSaveLED").click();
+				}
+			});
+			$('#aptsLoadModal').on('shown.bs.modal', function () {
+				$('#aptStringList').trigger('focus');
+			});
+			$("#aptStringList").keyup(function (event) {
+				if (event.keyCode === 13) {
+					$("#btnNewApts").click();
+				}
+			});
+		});
+		
+	</script>
+	<title>Airport Map Setup</title>
+	<style>
+		* {
+			-webkit-user-select: auto;
+			/*-khtml-user-select: none;*/
+			-moz-user-select: -moz-none;
+			-o-user-select: none;
+			user-select: none;
+		}
+	</style>
+</head>
+<body>
+	<!-- Modal popup forms -->
+	<div class="modal fade" id="ledCountModal" tabindex="-1" role="dialog" aria-labelledby="ledCountModalTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="ledCountModalTitle">Change number of LEDs</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="alert alert-warning" role="alert">
+						<label>NOTE: Changing the number of LEDs will reset all the airport assignments.</label>
+					</div>
+					<label>Enter LED count</label>
+					<input type="text" id="LEDCount" class="form-control" />
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" id="btnSaveLED" data-dismiss="modal" onclick="changeLEDCount()">Save Changes</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="aptsLoadModal" tabindex="-1" role="dialog" aria-labelledby="aptsLoadModalTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="aptsLoadModalTitle">Change airport names</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="alert alert-warning" role="alert">
+						<label>NOTE: This will erase all current airports and their assignments.</label>
+					</div>
+					<label>Enter comma delimited airport list</label>
+					<input type="text" id="aptStringList" class="form-control" />
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" id="btnNewApts" data-dismiss="modal" onclick="newAptList()">Import Airports</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid">
+		<nav class="navbar navbar-expand flex-column flex-md-row bd-navbar" style="background-color:#563d7c;">
+			<a class="navbar-brand" href="#" style="color:#ffd800;">Mark's Airport Map</a>
+			<div class="navbar-nav-scroll">
+				<ul class="navbar-nav bd-navbar-nav flex-row">
+					<li class="nav-item">
+						<a class="nav-link" style="color:#ffd800;" href="/home.html">Home</a>
+					</li>
+				</ul>
+			</div>
+		</nav>&nbsp;
+		<div class="row">
+			<div class="col-md-6">
+				<div class="alert alert-warning" role="alert">
+					<table>
+						<tr>
+							<td>
+								<i class="fas fa-info-circle" style="font-size:30px;"></i>
+							</td>
+							<td style="width:10px;">&nbsp;</td>
+							<td>
+								Drag an airport from the list on the left to the desired LED box.
+								Double click the LED box to clear it.
+								Click the LED number to flash that LED on the map.
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="row">
+					<a href='#' data-toggle="modal" data-target="#ledCountModal">Click here to change the number of LEDs.</a>
+				</div>
+				<div class="row">
+					<a href='#' data-toggle="modal" data-target="#aptsLoadModal">Click here to reload airport list.</a>
+				</div>
+				<table>
+					<tr>
+						<td>Flash when winds are&nbsp;</td>
+						<td>
+							<input type="text" id="txtWind" style="width:60px;" class="form-control" value="{WNDSPEED}" onchange="showSave();" />
+						</td>
+						<td>&nbsp;knots or more.</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="row" id="BTN_Save" style="display:none;margin-bottom:5px;">
+			<div class="col-md-3">
+				<button class="btn btn-danger" onclick="doSave()">
+					<i class="far fa-save" style="font-size:20px;"></i>&nbsp;Save
+				</button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-2 col-lg-1">
+				<label><i class="fas fa-plane"></i>&nbsp;Airports</label>
+				<table border="1">
+					<tbody id="aptList" style="display:block;height:300px;overflow:auto">
+						{AIRPORT_ITEMS}
+					</tbody>
+				</table>
+			</div>
+			<div class="col-10 col-lg-11">
+				<label><i class="fas fa-lightbulb"></i>&nbsp;LEDs</label>
+				<div class="row d-flex flex-row" style="padding:0; margin:0;">
+					{LED_ITEMS}
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

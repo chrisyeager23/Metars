@@ -1,0 +1,630 @@
+{
+  "LEDs": 152,
+  "WindSpeed": 12,
+  "Airports": [
+    {
+      "Name": "KABE",
+      "LEDIndex": 1
+    },
+    {
+      "Name": "KABI",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KABQ",
+      "LEDIndex": 2
+    },
+    {
+      "Name": "KACY",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KADW",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KALB",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KAMA",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KATL",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KATW",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KAUS",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KAVL",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KBAB",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KBAD",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KBDL",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KBGR",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KBHM",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KBIL",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KBNA",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KBOI",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KBOS",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KBTR",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KBTV",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KBUF",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KBUR",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KBWI",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KCAE",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KCAK",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KCBM",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KCHA",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KCHS",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KCID",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KCLE",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KCLT",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KCMH",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KCMI",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KCOS",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KCRP",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KCRW",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KCVG",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KDAB",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KDAY",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KDCA",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KDEN",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KDFW",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KDLF",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KDMA",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KDSM",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KDTW",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KDYS",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KELP",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KEVV",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KEWR",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KFAT",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KFAY",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KFLL",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KFNT",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KFWA",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KGEG",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KGRB",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KGRR",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KGSO",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KGSP",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KHOU",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KHRL",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KHSV",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KIAD",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KIAH",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KICT",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KIND",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KISP",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KJAN",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KJAX",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KJFK",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KLAN",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KLAS",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KLAX",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KLBB",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KLEX",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KLFT",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KLGA",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KLIT",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KLNK",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KMAF",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KMCI",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KMCO",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KMDW",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KMEM",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KMHT",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KMIA",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KMKE",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KMLI",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KMOB",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KMRY",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KMSN",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KMSP",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KMSY",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KMYR",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KNDZ",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KNKX",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KNPA",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KNSE",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KNUW",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KOAK",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KOFF",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KOKC",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KOMA",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KONT",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KORD",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KORF",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KPBI",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KPDX",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KPHL",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KPHX",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KPIA",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KPIT",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KPNS",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KPOB",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KPVD",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KPWM",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KRDU",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KRIC",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KRIV",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KRNO",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KROA",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KROC",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KRSW",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KSAN",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KSAT",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KSAV",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KSBA",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KSBN",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KSDF",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KSEA",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KSFB",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KSFO",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KSGF",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KSHV",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KSJC",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KSKA",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KSLC",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KSMF",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KSNA",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KSPI",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KSRQ",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KSSC",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KSTL",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KSYR",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KTIK",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KTLH",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KTOL",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KTPA",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KTUL",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KTUS",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KTYS",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KVBT",
+      "LEDIndex": -1
+    },
+    {
+      "Name": "KXNA",
+      "LEDIndex": -1
+    }
+  ]
+}
