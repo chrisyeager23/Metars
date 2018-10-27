@@ -1,0 +1,56 @@
+Installing the Raspberry PI from scratch for the Metars application
+
+PI Install
+------------------------------------------
+1. Installed minimum Raspian Light (no desktop)
+2. Changed the host name to 'metars'
+3. Changed the password to 'Password123!'
+4. Setup the wifi SSID and password
+5. Boot options to wait for network
+6. Interface options (SSH and SPI turned on)
+7. Reboot
+
+Node JS Install
+------------------------------------------
+1. sudo apt-get update
+2. sudo apt-get dist-upgrade
+3. curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+4. sudo apt-get install -y nodejs
+
+rpi-ws281x-native Install
+------------------------------------------
+1. sudo npm install -g node-gyp
+2. sudo apt install git (install the git in order to do next command)
+3. sudo git clone --recursive https://github.com/beyondscreen/node-rpi-ws281x-native.git
+4. cd node-rpi-ws281x-native/
+5. sudo npm install
+6. sudo node-gyp rebuild
+
+At this point the examples in the example directory should run
+--------------------------------------------------------------
+1. cd examples/
+2. sudo nodejs rainbow
+
+Disable the sound card (it uses the same pins as lights could cause problems)
+-----------------------------------------------------------------------------
+1. cd /etc/modprobe.d
+2. sudo nano alsa-blacklist.conf
+3. Add line 'blacklist snd_bcm2835'
+4. Save file and reboot
+
+Install more node js packages
+--------------------------------------
+1. in the home/pi directory
+2. sudo npm install xml2js
+3. sudo npm install socket.io
+
+Create the 'Metars' directory and install
+-----------------------------------------
+1. in the home/pi directory
+2. create a directory 'metars'
+3. copy from the owncloud Metarr\<version> into this directory
+4. this should consist of some .js files and an html directory with files
+
+Turn of the wlan0 power_save
+-----------------------------
+1. sudo iw dev wlan0 set power_save off
