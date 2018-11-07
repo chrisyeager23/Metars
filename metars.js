@@ -4,11 +4,12 @@ try {
 	var Airport = require(__dirname + '/Airport');
 	// This next line states that we need the ConfigFile.js file included
 	var ConfigFile = require(__dirname + '/ConfigFile');
+	var FlightCategory = require(__dirname + '/FlightCategory');
 	// Needed for file system stuff
 	var fs = require('fs');
 	// Needed because this app hosts a small configuration web site
 	var http = require('http').createServer(handler);
-  // Needed for the setup screen
+	// Needed for the setup screen
 	var setup = require(__dirname + '/setup');
 	// Needed for the airport list screen
 	var home = require(__dirname + '/home');
@@ -22,6 +23,26 @@ try {
 	var blinkData;
 	var outData;
 	var blinkCycle = false;
+
+	// ---- trap the SIGINT or SIGTERM and reset before exit
+	var signals = { 'SIGINT': 2, 'SIGTERM': 15 };
+	function shutdown(signal, value) {
+		clearInterval(ledUpdateInt);
+		clearInterval(aptUpdateInt);
+		console.log('Stopped by ' + signal);
+		for (var i = 0; i < cf.LEDs; i++) {
+			pixelData[i] = 0;
+		}
+		ws281x.render(pixelData);
+		ws281x.reset();
+		process.nextTick(function () { process.exit(0); });
+	}
+	Object.keys(signals).forEach(function (signal) {
+		process.on(signal, function () {
+			shutdown(signal, signals[signal]);
+		});
+	});
+
 
 	// Load up the config file
 	var cf = new ConfigFile();
@@ -47,23 +68,14 @@ try {
 		cf.updateFromWeb(setLEDColors);
 	}, 60000 * 5);
 
-  // ---- trap the SIGINT and reset before exit
-	process.on('SIGINT', function () {
-		clearInterval(ledUpdateInt);
-		clearInterval(aptUpdateInt);
-		ws281x.reset();
-		process.nextTick(function () { process.exit(0); });
-	});
-
 	// This function initializes the LEDs for use
 	function setupLEDs(cf) {
-		//ws281x.reset();
 		pixelData = new Uint32Array(cf.LEDs);
 		blinkData = new Uint32Array(cf.LEDs);
 
 		// Initialize the LED Driver
 		console.log('Init:' + cf.LEDs);
-		ws281x.init(cf.LEDs);
+		ws281x.init(cf.LEDs, { dmaNum: 10 });
 	}
 	// This function sets the colors of the LEDs per the airport status
 	function setLEDColors(cf) {
@@ -72,6 +84,30 @@ try {
 			pixelData[idx] = 0;
 			blinkData[idx] = 0;
 		}
+		// Set the ones for the FlightCategories with LED Indexes
+		cf.FlightCategories.forEach((el) => {
+			if (el.LEDIndex != -1 && el.LEDIndex <= cf.LEDs) {
+				var idx = el.LEDIndex - 1; // LEDs really start at 0 so subtract 1
+				switch (el.Name) {
+					case 'VFR':
+						pixelData[idx] = 0xff0000;
+						blinkData[idx] = 0xff0000;
+						break;
+					case 'MVFR':
+						pixelData[idx] = 0x0000ff;
+						blinkData[idx] = 0x0000ff;
+						break;
+					case 'IFR':
+						pixelData[idx] = 0x00FF00;
+						blinkData[idx] = 0x00FF00;
+						break;
+					case 'LIFR':
+						pixelData[idx] = 0x00ffff;
+						blinkData[idx] = 0x00ffff;
+						break;
+				}
+			}
+		});
 		// Just set the ones for the airports with LEDIndexes
 		cf.Airports.forEach((el) => {
 			if (el.LEDIndex != -1 && el.LEDIndex <= cf.LEDs) {
@@ -88,33 +124,44 @@ try {
 
 	// Create the 'web server' handler
 	function handler(req, res) {
-		var path = url.parse(req.url).pathname.toLowerCase();
-//		var fn = __dirname + '\\html' + path.replace('/','\\');  // For DOS based
-		if (path == '/') {
-			path = '/home.html';
-		}
-		var fn = __dirname + '/html' + path;
-		console.log('Path:' + path);
-		fs.readFile(fn, function (err, data) {
-			if (err) {
-				res.writeHead(404);
-				res.write('err');
+		try {
+			//var path = url.parse(req.url).pathname.toLowerCase();
+			var path = req.url;
+			//		var fn = __dirname + '\\html' + path.replace('/','\\');  // For DOS based
+			if (path == '/') {
+				path = '/home.html';
 			}
-			else {
-				var outData = '';
-				switch (path) {
-					case '/setup.html':
-						outData = new setup().doIt(data, req, res, cf);
-						break;
-					case '/home.html':
-						outData = new home().doIt(data, req, res, cf);
-						break;
+			var fn = __dirname + '/html' + path;
+			console.log('Path:' + path);
+			fs.readFile(fn, function (err, data) {
+				if (err) {
+					res.writeHead(404);
+					res.write('err');
 				}
-				res.writeHead(200, { 'Content-Type': 'text/html' });
-				res.write(outData);
-			}
+				else {
+					var outData = '';
+					switch (path) {
+						case '/setup.html':
+							outData = new setup().doIt(data, req, res, cf);
+							break;
+						case '/home.html':
+							outData = new home().doIt(data, req, res, cf);
+							break;
+					}
+					res.writeHead(200, { 'Content-Type': 'text/html' });
+					res.write(outData);
+					console.log('write out html');
+				}
+				res.end();
+				console.log('end');
+			});
+		}
+		catch (error) {
+			console.log(error);
+			res.writeHead(404);
+			res.write('Something wrong happened!');
 			res.end();
-		});
+		}
 	}
 	http.listen(8080);
 
@@ -130,7 +177,7 @@ try {
 		})
 		// This will save the config file
 		socket.on('SAVE', function (saveString) {
-			//console.log('SAVING:' + saveString);
+			console.log('SAVING:' + saveString);
   		cf.loadFromJSON(JSON.parse(saveString));
 			try {
 				cf.save(__dirname + '/config.json');

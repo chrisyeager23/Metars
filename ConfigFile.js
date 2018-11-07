@@ -1,4 +1,5 @@
-﻿var Airport = require('./Airport');          // Needed because a ConfigFile consists of Airport objects
+﻿var Airport = require(__dirname +'/Airport');               // Needed because a ConfigFile consists of Airport objects
+var FlightCategory = require(__dirname +'/FlightCategory'); // Needed because a ConfigFile consists of FlightCategory objects
 var fs = require('fs');                      // Needed for file IO (saving and loading the ConfigFile)
 var http = require('http');                  // Needed to gather weather information from the gov site
 var https = require('https');                // Needed to gather weather information from the gov site
@@ -6,14 +7,14 @@ var https = require('https');                // Needed to gather weather informa
 // This is a list of the properties to save in the 'stringification' of this
 // ConfigFile object.  It includes all the properties of this class and the
 // Airport class that are to be persisted.
-const propsToSave = ['LEDs', 'WindSpeed', 'Airports', 'Name', 'LEDIndex'];
+const propsToSave = ['LEDs', 'WindSpeed', 'Airports', 'Name', 'LEDIndex', 'FlightCategories'];
 
 const metarRegex = [/(\d+)SM/, /SKC|CLR|NSC|((FEW|SCT|BKN|OVC)(\d{3}))/, /(.+?)KT/];
 
 // Here is the URL to get the RAW weather for the airports. <APTS> is to be replaced with a comma delimited
 // list of airports.  Example 'KBHM,KHSV'
 const URL = 'https://www.aviationweather.gov/metar/data?ids=<APTS>&format=raw&hours=0&taf=off&layout=off&date=0';
-const WEATHER_URL = 'https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=1.5&stationString=<APTS>';
+//const WEATHER_URL = 'https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=1.5&stationString=<APTS>';
 
 // This class defines the config file storing:
 // . Number of LEDs used
@@ -23,6 +24,7 @@ module.exports = class ConfigFile {
 		this.LEDs = 0;
 		this.WindSpeed = 10;
 		this.Airports = [];
+		this.FlightCategories = [];
 	}
 
 	// Save the ConfgFile instance to a JSON file called 'filename'.  Using the
@@ -46,6 +48,11 @@ module.exports = class ConfigFile {
 			this.LEDs = 50;
 			this.WindSpeed = 10;
 			this.Airports = [];
+			this.FlightCategories = [];
+			var fc = new FlightCategory(); fc.Name = 'VFR'; fc.LEDIndex = -1; this.FlightCategories.push(fc);
+			fc = new FlightCategory(); fc.Name = 'MVFR'; fc.LEDIndex = -1; this.FlightCategories.push(fc);
+			fc = new FlightCategory(); fc.Name = 'IFR'; fc.LEDIndex = -1; this.FlightCategories.push(fc);
+			fc = new FlightCategory(); fc.Name = 'LIFR'; fc.LEDIndex = -1; this.FlightCategories.push(fc);
 		}
 	}
 
@@ -61,6 +68,15 @@ module.exports = class ConfigFile {
 			apts.push(ap);
 		});
 		this.Airports = apts;
+
+		var fcs = [];
+		jsonObj.FlightCategories.forEach(function (el) {
+			var fc = new FlightCategory();
+			fc.Name = el.Name;
+			fc.LEDIndex = el.LEDIndex;
+			fcs.push(fc);
+		});
+		this.FlightCategories = fcs;
 	}
 
 	// This method will update the information about airports fromthe gov.weather

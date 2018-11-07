@@ -43,33 +43,58 @@
 		function changeLEDCount() {
 			var ap = Number($("#LEDCount").val().trim());
 			socket.emit("LEDCOUNT", ap);
-			location.reload();
+			setTimeout(function () {
+				location.reload();
+			}, 1000);
 		}
 		function newAptList() {
 			var apts = $("#aptStringList").val();
 			socket.emit("NEWAPTS", apts);
-			location.reload();
+			setTimeout(function () {
+				location.reload();
+			}, 1000);
 		}
+
+		function getLEDWithName(name) {
+			var i = 1;
+			var lbl = document.getElementById("LBL_" + i);
+			while (lbl != null) {
+				if (lbl.innerText == name) {
+					return i;
+				}
+				i++;
+				lbl = document.getElementById("LBL_" + i);
+			}
+			return -1;
+		}
+
 		function doSave() {
 			// build up string of all airports and then a list of airports assigned to LEDs
 			var ws = $("#txtWind").val();
-		    var saveString = '{"LEDs": LEDCOUNT, "WindSpeed": ' + ws +', "Airports":[';
+			var saveString = '{"LEDs": LEDCOUNT, "WindSpeed": ' + ws
+				+ ', "FlightCategories":[';
+			// Build the list of FlightCategory Names and LEDIndexes
+			var comma = '';
+			var idx = 1;
+			var fc = document.getElementById("FC_" + idx);
+			while (fc != null) {
+				var name = fc.innerText;
+				var led = getLEDWithName(name);
+				saveString += comma + '{"Name": "' + name + '", "LEDIndex": ' + led + '}';
+				comma = ',';
+				idx++;
+				fc = document.getElementById("FC_" + idx);
+			}      
+
+			// Build the list of Airports Names and LEDIndexes
+			saveString += '], "Airports": [';
 			var comma = '';
 			var idx = 1;
 			var ap = document.getElementById("AP_" + idx);
 			while (ap != null) {
 				var name = ap.innerText;
 				// Find the LED that has this airport (null if not found)
-				var i = 1, led = -1;
-				var lbl = document.getElementById("LBL_" + i);
-				while (lbl != null) {
-					if (lbl.innerText == name) {
-						led = i;
-						break;
-					}
-					i++;
-					lbl = document.getElementById("LBL_" + i);
-				}
+				var led = getLEDWithName(name);
 				saveString += comma + '{"Name": "' + name + '", "LEDIndex": ' + led + '}';
 				comma = ',';
 				idx++;
@@ -85,7 +110,9 @@
 			}
 			saveString = saveString.replace('LEDCOUNT', ledc-1);
 			socket.emit("SAVE", saveString);
-			location.reload();
+			setTimeout(function () {
+				location.reload();
+			}, 1000);
 		}
 		$(document).ready(function () {
 			$('#ledCountModal').on('shown.bs.modal', function () {
@@ -230,7 +257,15 @@
 					</tbody>
 				</table>
 			</div>
-			<div class="col-10 col-lg-11">
+			<div class="col-2 col-lg-1">
+				<label><i class="fas fa-sun"></i>&nbsp;Legend</label>
+				<table border="1">
+					<tbody id="fcList" style="display:block">
+						{FC_ITEMS}
+					</tbody>
+				</table>
+			</div>
+			<div class="col-8 col-lg-10">
 				<label><i class="fas fa-lightbulb"></i>&nbsp;LEDs</label>
 				<div class="row d-flex flex-row" style="padding:0; margin:0;">
 					{LED_ITEMS}
